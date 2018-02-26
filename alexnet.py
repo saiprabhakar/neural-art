@@ -9,16 +9,28 @@ from skimage import io, transform
 # ('fc', nunits)
 
 
-def load_process_image(imgpath):
-    # Load, resize, meansub and brg->rgb transformation
+def load_process_image(imgpath, mean_pix):
+    # Load, resize, meansub and rgb->bgr transformation
+    # mean_pix in bgr format
     # returns orgimage and processed img
     im1 = []
     im1 = io.imread(imgpath)[:,:,:3].astype(np.double)
     im1 = transform.resize(im1, (227,227,3)).astype(np.float32)
-    im0 = im1
-    im1 = im1 - np.mean(im1)
-    im1[:, :, 0], im1[:, :, 2] = im1[:, :, 2], im1[:, :, 0]
+    im0 = np.copy(im1)
+    temp1 = np.copy(im1[:, :, 2])
+    temp2 = np.copy(im1[:, :, 0])
+    im1[:, :, 0] = temp1
+    im1[:, :, 2] = temp2
+    im1 = im1 - mean_pix#np.mean(im1)
     return im0, im1
+
+def unprocess_image(im1, mean_pix):
+    im1 += mean_pix
+    temp1 = np.copy(im1[:, :, 2])
+    temp2 = np.copy(im1[:, :, 0])
+    im1[:, :, 0] = temp1
+    im1[:, :, 2] = temp2
+    return im1
 
 def print_prob(prob, file_path):
     synset = [l.strip() for l in open(file_path).readlines()]
