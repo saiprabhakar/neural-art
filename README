@@ -1,0 +1,14 @@
+```
+pip install virtualenv
+virtualenv -p python3.5 venv1
+. venv1/bin/activate
+pip --no-cache-dir install jupyter tensorflow scikit-image 
+mkdir model/
+```
+download bvlc_alexnet.npy from https://www.cs.toronto.edu/~guerzhoy/tf_alexnet/ 
+```
+Optional:
+pip no-cache-dir install jupyter_contrib_nbextensions jupyter_nbextensions_configurator
+jupyter nbextensions_configurator enable user
+jupyter-contrib-nbextension install --system
+```
